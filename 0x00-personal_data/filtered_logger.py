@@ -36,8 +36,9 @@ class RedactingFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         """Formats the log record, redacting specified fields."""
-        org = super().format(record)
-        return filter_datum(self.fields, self.REDACTION, org, self.SEPARATOR)
+        original_message = super(RedactingFormatter, self).format(record)
+        redacted_message = filter_datum(self.fields, self.REDACTION, original_message, self.SEPARATOR)
+        return redacted_message
 
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
