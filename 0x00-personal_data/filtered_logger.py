@@ -83,13 +83,10 @@ def main() -> None:
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
     log = get_logger()
+    fields = cursor.column_names
     for row in cursor:
-        data = []
-        for desc, value in zip(cursor.description, row):
-            pair = f"{desc[0]}={str(value)}"
-            data.append(pair)
-        row_str = "; ".join(data)
-        log.info(row_str)
+        message = "".join("{}={}; ".format(k, v) for k, v in zip(fields, row))
+        log.info(message.strip())
     cursor.close()
     db.close()
 
