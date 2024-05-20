@@ -16,7 +16,7 @@ class Auth():
         Returns:
             bool: True if the path requires authentication, False otherwise
         """
-        if path is None or excluded_paths is None:
+        if path is None or excluded_paths is None or excluded_paths == []:
             return True
 
         if path in excluded_paths:
