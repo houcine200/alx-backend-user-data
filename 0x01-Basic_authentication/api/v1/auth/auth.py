@@ -8,8 +8,27 @@ class Auth():
     """Class to manage API authentication"""
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """Method to check if a path requires authentication"""
-        return False
+        """
+        Method to check if a path requires authentication
+        Args:
+            path (str): the path to check
+            excluded_paths(List[str]): list of paths not require authentication
+        Returns:
+            bool: True if the path requires authentication, False otherwise
+        """
+        if path is None or excluded_paths is None:
+            return True
+
+        if path in excluded_paths:
+            return False
+
+        if path[-1] != "/":
+            path += "/"
+
+        if path in excluded_paths:
+            return False
+        else:
+            return True
 
     def authorization_header(self, request=None) -> str:
         """Method to get the authorization header from the request"""
