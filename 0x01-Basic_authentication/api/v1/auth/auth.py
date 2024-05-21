@@ -30,10 +30,18 @@ class Auth():
         else:
             return True
 
-    def authorization_header(self, request=None) -> str:
-        """Method to get the authorization header from the request"""
-        return None
+    def authorization_header(self, request=None):
+        """
+        Method to get the authorization header from the request
+        Args:
+            request (Flask request): the request object
+        Returns:
+            str: the value of the Authorization header or None if not present
+        """
+        if request is None or 'Authorization' not in request.headers:
+            return None
+        return request.headers['Authorization']
 
-    def current_user(self, request=None) -> TypeVar('User'):
+    def current_user(self, request=None) -> TypeVar('User'):  # type: ignore
         """Method to get the current user from the request"""
         return None
