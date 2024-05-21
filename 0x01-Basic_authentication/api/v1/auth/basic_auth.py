@@ -102,3 +102,25 @@ class BasicAuth(Auth):
             if user.is_valid_password(user_pwd):
                 return user
         return None
+
+    def current_user(self, request=None) -> User:
+        """Retrieve the User instance for a request."""
+        # Extract the Authorization header from the request
+        authorization_header = self.authorization_header(request)
+
+        # Extract and decode the Base64 encoded part of the Authorization
+        # header
+        base64_authorization_header = self.extract_base64_authorization_header(
+            authorization_header)
+
+        # Decode the Base64 string to UTF-8
+        decoded_credentials = self.decode_base64_authorization_header(
+            base64_authorization_header)
+
+        # Extract user credentials from the decoded string
+        email, password = self.extract_user_credentials(decoded_credentials)
+
+        # Retrieve the User object based on the extracted credentials
+        user = self.user_object_from_credentials(email, password)
+
+        return user
