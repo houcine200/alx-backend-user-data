@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ Module for Basic Authentication """
 from .auth import Auth
+from models.user import User
 import base64
 
 
@@ -73,3 +74,32 @@ class BasicAuth(Auth):
         email = decoded_base64_authorization_header.split(":")[0]
         password = decoded_base64_authorization_header.split(":")[1]
         return email, password
+
+    def user_object_from_credentials(
+            self,
+            user_email: str,
+            user_pwd: str) -> User:
+        """
+        Retrieves the User instance based on the email and password.
+
+        Args:
+            user_email (str): The user email.
+            user_pwd (str): The user password.
+
+        Returns:
+            User: The User instance if found, else None.
+        """
+        if user_email is None or not isinstance(user_email, str):
+            return None
+        if user_pwd is None or not isinstance(user_pwd, str):
+            return None
+
+        users = User.search({'email': user_email})
+        if not users:
+            return None
+
+        user = users[0]
+        if not user.is_valid_password(user_pwd):
+            return None
+
+        return user
