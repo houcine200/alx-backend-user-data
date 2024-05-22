@@ -89,14 +89,15 @@ class BasicAuth(Auth):
         Returns:
             User: The User instance if found, else None.
         """
-        if user_email is None or not isinstance(user_email, str) or \
-                user_pwd is None or not isinstance(user_pwd, str):
+        if user_email is None or not isinstance(user_email, str):
+            return None
+        if user_pwd is None or not isinstance(user_pwd, str):
             return None
 
-        user = User().search({"email": user_email})
-        if user == [] or not user[0].is_valid_password(user_pwd):
+        users = User().search({"email": user_email})
+        if users == [] or not users[0].is_valid_password(user_pwd):
             return None
-        return user[0]
+        return users[0]
 
     def current_user(self, request=None) -> User:
         """Retrieve the User instance for a request."""
