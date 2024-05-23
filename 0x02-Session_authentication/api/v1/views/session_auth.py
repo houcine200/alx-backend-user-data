@@ -2,7 +2,7 @@
 """ Module of Users views
 """
 from api.v1.views import app_views
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from api.v1.views import User
 import os
 
@@ -44,3 +44,12 @@ def session_auth():
 
     # If password does not match any user
     return jsonify({"error": "wrong password"}), 401
+
+
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def session_logout():
+    """Logout route."""
+    from api.v1.app import auth
+    if auth.destroy_session(request) is False:
+        abort(404)
+    return jsonify({}), 200
