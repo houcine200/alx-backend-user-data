@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+""" Module of Users views
+"""
 from api.v1.views import app_views
 from flask import request, jsonify
 from api.v1.views import User
