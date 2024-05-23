@@ -6,7 +6,10 @@ import os
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def session_auth():
-    """_summary_
+    """
+    Handle user login
+    Return:
+        dictionary representation of user if found else error message
     """
     email = request.form.get('email')
     password = request.form.get('password')
