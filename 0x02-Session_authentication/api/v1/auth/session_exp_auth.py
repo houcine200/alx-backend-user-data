@@ -11,6 +11,7 @@ class SessionExpAuth(SessionAuth):
     """
     authentication session
     """
+
     def __init__(self):
         """Initialize the SessionExpAuth with session duration."""
         super().__init__()
@@ -49,7 +50,8 @@ class SessionExpAuth(SessionAuth):
         if created_at is None:
             return None
 
-        if created_at + timedelta(seconds=self.session_duration) < datetime.now():
+        if created_at + \
+                timedelta(seconds=self.session_duration) < datetime.now():
             return None
 
         return user_id
