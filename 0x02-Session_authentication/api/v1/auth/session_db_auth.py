@@ -8,9 +8,7 @@ from models.user_session import UserSession
 
 
 class SessionDBAuth(SessionExpAuth):
-    """SessionDBAuth class to manage session authentication
-    with sessions stored in the database."""
-
+    """SessionDBAuth class to manage session authentication with sessions stored in the database."""
     def create_session(self, user_id=None):
         """Create and store a new session in the database."""
         session_id = super().create_session(user_id)
@@ -26,24 +24,25 @@ class SessionDBAuth(SessionExpAuth):
         if session_id is None:
             return None
 
-        user_sessions = UserSession.search({'session_id': session_id})
-        if not user_sessions:
-            return None
+        try:
+            user_sessions = UserSession.search({'session_id': session_id})
+            if not user_sessions:
+                return None
 
-        user_session = user_sessions[0]
-        if self.session_duration <= 0:
+            user_session = user_sessions[0]
+            if self.session_duration <= 0:
+                return user_session.user_id
+
+            created_at = user_session.created_at
+            if created_at + timedelta(seconds=self.session_duration) < datetime.now():
+                return None
+
             return user_session.user_id
-
-        created_at = user_session.created_at
-        if created_at + \
-                timedelta(seconds=self.session_duration) < datetime.now():
+        except Exception as e:
             return None
-
-        return user_session.user_id
 
     def destroy_session(self, request=None):
-        """Destroy the user session based on the session ID
-        from the request cookie."""
+        """Destroy the user session based on the session ID from the request cookie."""
         if request is None:
             return False
 
