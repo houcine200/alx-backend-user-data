@@ -36,7 +36,6 @@ def users():
 def login():
     """
     POST route to log in a user and create a new session.
-
     """
     email = request.form.get('email')
     password = request.form.get('password')
