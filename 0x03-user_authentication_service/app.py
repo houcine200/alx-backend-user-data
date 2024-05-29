@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """The main application."""
-from flask import Flask, jsonify, request, abort, make_response, Response
+from flask import Flask, jsonify, request, abort, make_response,\
+     Response, redirect
 from auth import Auth
 
 app = Flask(__name__)
@@ -48,6 +49,23 @@ def login() -> Response:
         return response
     else:
         abort(401)
+
+
+@app.route("/sessions", methods=["DELETE"], strict_slashes=False)
+def logout() -> Response:
+    """
+    DELETE route to log out a user and destroy the session.
+
+    Expects the session ID as a cookie with key 'session_id'.
+    """
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if user is None:
+        abort(404)
+
+    AUTH.destroy_session(user.id)
+    return redirect('/')
 
 
 if __name__ == "__main__":
