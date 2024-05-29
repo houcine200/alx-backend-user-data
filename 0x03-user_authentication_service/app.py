@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The main application."""
-from flask import Flask, jsonify, request, abort, make_response
+from flask import Flask, jsonify, request, abort, make_response, Response
 from auth import Auth
 
 app = Flask(__name__)
@@ -33,7 +33,7 @@ def users():
 
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
-def login():
+def login() -> Response:
     """
     POST route to log in a user and create a new session.
     """
