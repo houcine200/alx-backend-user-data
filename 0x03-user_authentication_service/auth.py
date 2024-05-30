@@ -4,25 +4,36 @@ from db import DB
 from sqlalchemy.orm.exc import NoResultFound
 import uuid
 from typing import Optional
+
 from user import User
+
+
 def _hash_password(password: str) -> bytes:
     """
     Hashes a password string using bcrypt.
     """
     password_bytes = password.encode('utf-8')
+
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password_bytes, salt)
+
     return hashed_password
+
+
 def _generate_uuid() -> str:
     """
     Generate a new UUID.
     """
     return str(uuid.uuid4())
+
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
+
     def __init__(self):
         self._db = DB()
+
     def register_user(self, email: str, password: str) -> User:
         """
         Register a new user.
@@ -32,9 +43,13 @@ class Auth:
             raise ValueError(f"User {email} already exists")
         except NoResultFound:
             pass
+
         hashed_password = _hash_password(password)
+
         user = self._db.add_user(email=email, hashed_password=hashed_password)
+
         return user
+
     def valid_login(self, email: str, password: str) -> bool:
         """
         Validate login credentials.
@@ -47,6 +62,7 @@ class Auth:
                 return False
         except NoResultFound:
             return False
+
     def create_session(self, email: str) -> str:
         """
         Create a session for the user with the given email.
@@ -60,6 +76,7 @@ class Auth:
             return session_id
         except NoResultFound:
             return None
+
     def get_user_from_session_id(
             self, session_id: Optional[str]) -> Optional[User]:
         """
@@ -68,11 +85,14 @@ class Auth:
         """
         if session_id is None:
             return None
+
         try:
             user = self._db.find_user_by(session_id=session_id)
         except NoResultFound:
             return None
+
         return user
+
     def destroy_session(self, user_id: int) -> None:
         """
         Destroy a user's session.
