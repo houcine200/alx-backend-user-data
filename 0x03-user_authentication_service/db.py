@@ -60,6 +60,7 @@ class DB:
             if hasattr(user, key):
                 setattr(user, key, value)
             else:
-                raise ValueError(f"'{key}' is not a valid attribute of User")
+                # {key} is not a valid attribute of User
+                raise ValueError
 
         self._session.commit()
