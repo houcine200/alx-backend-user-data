@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The main application."""
+""" The main flask application """
 from flask import Flask, jsonify, request, abort, make_response,\
      Response, redirect
 from auth import Auth
