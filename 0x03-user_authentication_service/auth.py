@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+""" The auth module """
 import bcrypt
 from db import DB
 from sqlalchemy.orm.exc import NoResultFound
