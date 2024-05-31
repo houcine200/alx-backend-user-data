@@ -108,3 +108,7 @@ def update_password() -> Response:
         abort(403)
 
     return jsonify({"email": email, "message": "Password updated"})
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port="5000", debug=True)
